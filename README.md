@@ -1,7 +1,7 @@
 # Spring Boot 2.4 project with Async custom setup
 
 After startup, trigger the long running job asynchronously by issuing a ```GET``` request
-on ```http://localhost:8080/job```.
+on ```http://localhost:8080/job1``` or ```http://localhost:8080/job2```.
 
 It will show logging similar to
 

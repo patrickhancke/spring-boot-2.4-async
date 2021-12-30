@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
@@ -24,14 +25,14 @@ import java.util.concurrent.Callable;
 
 @Configuration
 @EnableAsync
-public class AsyncConfig implements AsyncConfigurer {
-    private static final Logger logger = LoggerFactory.getLogger(AsyncConfig.class);
+public class Async1Config implements AsyncConfigurer {
+    private static final Logger logger = LoggerFactory.getLogger(Async1Config.class);
 
     @Override
-    @Bean
+    @Bean("executor1")
     public AsyncTaskExecutor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setThreadNamePrefix("my-prefix");
+        executor.setThreadNamePrefix("executor1-");
         executor.setCorePoolSize(5);
         executor.setMaxPoolSize(10);
         executor.setQueueCapacity(25);
@@ -57,7 +58,7 @@ public class AsyncConfig implements AsyncConfigurer {
     }
 
     @Bean
-    public WebMvcConfigurer webMvcConfigurerConfigurer(AsyncTaskExecutor taskExecutor, CallableProcessingInterceptor callableProcessingInterceptor) {
+    public WebMvcConfigurer webMvcConfigurerConfigurer(@Qualifier("executor1") AsyncTaskExecutor taskExecutor, CallableProcessingInterceptor callableProcessingInterceptor) {
         return new WebMvcConfigurer() {
             @Override
             public void configureAsyncSupport(AsyncSupportConfigurer configurer) {

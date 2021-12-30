@@ -10,11 +10,28 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class AsyncService {
     private static final Logger logger = LoggerFactory.getLogger(AsyncService.class);
+    private final CloseableExecutorService closeableExecutorService;
 
-    @Async
-    public void longRunningJob() throws InterruptedException {
-        logger.info("starting long running job");
+    public AsyncService(CloseableExecutorService closeableExecutorService) {
+        this.closeableExecutorService = closeableExecutorService;
+    }
+
+    @Async("executor1")
+    public void longRunningJob1() throws InterruptedException {
+        logger.info("starting long running job 1");
         TimeUnit.SECONDS.sleep(10L);
-        logger.info("finished long running job");
+        logger.info("finished long running job 1");
+    }
+
+    public void longRunningJob2() {
+        closeableExecutorService.submit(() -> {
+            try {
+                logger.info("starting long running job 2");
+                TimeUnit.SECONDS.sleep(10L);
+                logger.info("finished long running job 2");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

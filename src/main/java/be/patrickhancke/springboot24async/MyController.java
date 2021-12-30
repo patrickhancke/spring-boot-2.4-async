@@ -14,11 +14,19 @@ public class MyController {
         this.asyncService = asyncService;
     }
 
-    @GetMapping("job")
-    String launchJob() throws InterruptedException {
-        logger.info("triggering long running job");
-        asyncService.longRunningJob();
-        logger.info("job launched in the background");
-        return "job launched";
+    @GetMapping("job1")
+    String launchJob1() throws InterruptedException {
+        logger.info("triggering long running job 1");
+        asyncService.longRunningJob1();
+        logger.info("job 1 launched in the background");
+        return "job 1 launched";
+    }
+
+    @GetMapping("job2")
+    String launchJob2() throws InterruptedException {
+        logger.info("triggering long running job 2");
+        asyncService.longRunningJob2();
+        logger.info("job 2 launched in the background");
+        return "job 2 launched";
     }
 }
